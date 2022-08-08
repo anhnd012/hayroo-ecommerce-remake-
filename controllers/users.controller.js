@@ -18,23 +18,23 @@ async function signUp(req, res) {
         created_on
     };
 
-    console.log(userObject);
+    // console.log(userObject);
 
     try {
         // Encrypt password 
         const hashedPassword = await bcrypt.hash(req.body.user_password, 10);
         const validate = await Users.validateAsync(userObject);
-        const response = await query(sign_up, [userObject.user_name, 
-            hashedPassword, userObject.gmail, created_on]);
+        // const response = await query(sign_up, [userObject.user_name, 
+        //     hashedPassword, userObject.gmail, created_on]);
 
-        // delete userObject.confirm_password;
+        delete userObject.confirm_password;
+        userObject.user_password = hashedPassword;
+        let userCreated = Object.values(userObject);
+        const sqlCreate = await create("Users", userObject);
         
-        // const userCreated = await create("Users", userObject);
-        // const response = await query(userCreated, [userObject.user_name, 
-        //         hashedPassword, userObject.gmail, created_on]);
-
+        const response = await query(sqlCreate, userCreated);
         return res.status(200).json({
-            message: validate.message
+            message: validate
         })
     } catch (err) {
         return res.status(400).json({

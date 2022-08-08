@@ -7,7 +7,6 @@ const categoryModel = joi.object({
     cate_desc: joi.string().required(),
     cate_image: joi.any().meta({swaggerType: 'file'}).optional()
     .description('Image File'),
-    price: joi.number().required(),
     cate_status: joi.string().valid('active', 'inactive'),
     created_at: joi.date().iso(),
     updated_at: joi.date().iso()

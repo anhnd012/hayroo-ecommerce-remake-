@@ -43,8 +43,9 @@ const update_product = 'UPDATE public."Products" ' +
 const create = (modelName, data) => {
     // const modelName = model.objectName;
     // console.log(data);
-    
+    console.log(data);
     let sql = `INSERT INTO public."${modelName}"(`;
+    let i = 0;
     for (const [key, value] of Object.entries(data)) {
         sql += `${key} ,`;
     }
@@ -52,24 +53,44 @@ const create = (modelName, data) => {
     // Object.values(data).pop() = Object.values(data).pop().toISOString();
     // Object.values(data)[Object.values(data).length - 1] = Object.values(data)[Object.values(data).length - 1].toISOString();
     for (const [key, value] of Object.entries(data)) {
-        console.log(typeof(value));
-        if(moment(value, moment.ISO_8601, true).isValid()){
-            sql += `${value.toISOString().substring(0, 10)}`
-        }else{
-            sql += `${value},`;
-        }
-        
-        // console.log(value);
+        sql += `$${++i},`;
     }
+    // sql += "$1)";
     sql = sql.substring(0, sql.length - 1) + ")";
     // console.log(typeof(Object.values(data).pop()));
     console.log(sql);
     return new Promise((resolve) => resolve(sql));
 }
 
-function convertDate (value){
+function update (modelName, data) {
+
+    let sql = `UPDATE public."${modelName}" SET `;
+    let i = 0;
+    for (const [key, value] of Object.entries(data)){
+        sql += `${key} = $${++i},`
+    }
+    // sql = sql.substring(0, sql.length - 1) + " WHERE ";
+    //console.log(sql.substring(sql.length - 14, sql.length -1));
+    temp = sql.substring(sql.length - 14, sql.length - 1);
+    sql = sql.replace(temp, "");
+    sql = sql.substring(0, sql.length - 2);
+    sql += " WHERE " + temp;
+    console.log(sql);
+    return new Promise((resolve) => resolve(sql));
+}
+
+function deleted (modelName, data){
+    let sql = ''
+    for(const [key, value] of Object.entries(data)){
+        sql += `DELETE FROM public."${modelName}" WHERE ${key} = $1`;
+    }
+    return new Promise((resolve) => resolve(sql));
     
 }
+
+// function convertDate (value){
+    
+// }
 /*
 ...{
     id: 1,
@@ -104,5 +125,7 @@ module.exports = {
     delete_product,
     update_product,
 
-    create
+    create,
+    update,
+    deleted
 }

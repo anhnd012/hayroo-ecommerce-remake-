@@ -8,7 +8,7 @@ const productModel = joi.object({
     cate_id: joi.number().integer().required(),
     sold: joi.number().integer(),
     quantity: joi.number().integer().required(),
-    prod_images: joi.any().meta({swaggerType: 'file'}).optional()
+    images: joi.any().meta({swaggerType: 'file'}).optional()
     .description('Image File').required(),
     price: joi.number().required(),
     prod_status: joi.string().valid('active', 'inactive').required(),
@@ -20,7 +20,9 @@ const productModel = joi.object({
 
 const productModel_prod_id = joi.number().integer();
 
+
 module.exports = {
     productModel,
-    productModel_prod_id
+    productModel_prod_id,
+
 }
