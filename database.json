@@ -1,0 +1,9 @@
+{
+    "dev": {
+      "driver": "pg",
+      "user": "ducanh",
+      "password": "Nguyenducanh123",
+      "host": "database-1.cbelvahipor4.us-east-1.rds.amazonaws.com",
+      "database": "hayroo-ecommerce"
+    }
+}
